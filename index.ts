@@ -10,11 +10,24 @@ let rl = readline.createInterface({
 const db: Db = new Db();
 
 // Validator
+const expectedCommandLenghts = new Map<string, number>([
+    ['GET', 2],
+    ['SET', 3],
+    ['UNSET', 2],
+    ['NUMEQUALTO', 2],
+    ['END', 1],
+    ['BEGIN', 1],
+    ['COMMIT', 1],
+    ['ROLLBACK', 1],
+]);
 function isValidInput(splits: string[]): boolean {
-    if(splits.length === 0) {
+    if(splits.length === 0 || !expectedCommandLenghts.has(splits[0])) {
         return false;
     }
 
+    if(expectedCommandLenghts.get(splits[0]) !== splits.length) {
+        return false;
+    }
     return true;
 }
 
